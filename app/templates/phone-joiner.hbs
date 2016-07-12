@@ -1,0 +1,11 @@
+<h1>Phone number joiner</h1>
+{{x-file-input name="files" multiple=false action=(action "didSelectFiles") alt="Choose a File"}}
+{{fileName}}
+<br>
+<button {{action "join"}}>Join</button>
+<br>
+<p>Output</p>
+<textarea rows="5" cols="100" id="output">{{output}}</textarea>
+<button class="btn" data-clipboard-target="#output">
+    Copy to clipboard
+</button>
