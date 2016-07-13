@@ -2,6 +2,9 @@
 {{x-file-input name="files" multiple=false action=(action "didSelectFiles") alt="Choose a File"}}
 {{fileName}}
 <br>
+<p>Column name (optional)</p>
+{{input value=columnName}}
+<br>
 <button {{action "join"}}>Join</button>
 <br>
 <p>Output</p>

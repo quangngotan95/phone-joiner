@@ -46,6 +46,7 @@ define('phone-joiner/controllers/phone-joiner', ['exports', 'ember', 'npm:babypa
     csvData: {},
     output: '',
     fileName: '',
+    columnName: '',
     actions: {
       join: function join() {
         var csvData = this.get('csvData');
@@ -54,14 +55,29 @@ define('phone-joiner/controllers/phone-joiner', ['exports', 'ember', 'npm:babypa
         var head = rows[0];
         var numberArray = [];
         var index = -1;
+        var columnName = this.get('columnName');
         for (var i = 0; i < head.length; i++) {
-          if (head[i].indexOf('Number') > -1) {
+          if (head[i].indexOf('number') > -1 || head[i].indexOf('Number') > -1 || head[i].indexOf('Phone') > -1 || head[i].indexOf('phone') > -1) {
             index = i;
             break;
           }
-        }if (index > -1) for (var i = 1; i < rows.length; i++) {
-          numberArray.push(rows[i][index]);
-        }var output = numberArray.join(',');
+        }
+        if (columnName) {
+          index = head.indexOf(columnName);
+        }
+        if (index > -1) {
+          for (var i = 1; i < rows.length; i++) {
+            var temp = rows[i][index];
+            if (!temp) {
+              continue;
+            }
+            if (temp.indexOf('+65') === -1) {
+              temp = '+65' + temp;
+            }
+            numberArray.push(temp);
+          }
+        }
+        var output = numberArray.join(',');
         this.set('output', output);
       },
 
@@ -284,7 +300,7 @@ define("phone-joiner/templates/phone-joiner", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 15,
             "column": 9
           }
         },
@@ -314,6 +330,20 @@ define("phone-joiner/templates/phone-joiner", ["exports"], function (exports) {
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
+        var el1 = dom.createElement("p");
+        var el2 = dom.createTextNode("Column name (optional)");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("br");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("button");
         var el2 = dom.createTextNode("Join");
         dom.appendChild(el1, el2);
@@ -331,11 +361,15 @@ define("phone-joiner/templates/phone-joiner", ["exports"], function (exports) {
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("textarea");
-        dom.setAttribute(el1, "rows", "5");
+        dom.setAttribute(el1, "rows", "15");
         dom.setAttribute(el1, "cols", "100");
         dom.setAttribute(el1, "id", "output");
         var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("br");
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
@@ -348,15 +382,16 @@ define("phone-joiner/templates/phone-joiner", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [8]);
-        var morphs = new Array(4);
+        var element0 = dom.childAt(fragment, [14]);
+        var morphs = new Array(5);
         morphs[0] = dom.createMorphAt(fragment, 2, 2, contextualElement);
         morphs[1] = dom.createMorphAt(fragment, 4, 4, contextualElement);
-        morphs[2] = dom.createElementMorph(element0);
-        morphs[3] = dom.createMorphAt(dom.childAt(fragment, [14]), 0, 0);
+        morphs[2] = dom.createMorphAt(fragment, 10, 10, contextualElement);
+        morphs[3] = dom.createElementMorph(element0);
+        morphs[4] = dom.createMorphAt(dom.childAt(fragment, [20]), 0, 0);
         return morphs;
       },
-      statements: [["inline", "x-file-input", [], ["name", "files", "multiple", false, "action", ["subexpr", "action", ["didSelectFiles"], [], ["loc", [null, [2, 50], [2, 75]]]], "alt", "Choose a File"], ["loc", [null, [2, 0], [2, 97]]]], ["content", "fileName", ["loc", [null, [3, 0], [3, 12]]]], ["element", "action", ["join"], [], ["loc", [null, [5, 8], [5, 25]]]], ["content", "output", ["loc", [null, [8, 42], [8, 52]]]]],
+      statements: [["inline", "x-file-input", [], ["name", "files", "multiple", false, "action", ["subexpr", "action", ["didSelectFiles"], [], ["loc", [null, [2, 50], [2, 75]]]], "alt", "Choose a File"], ["loc", [null, [2, 0], [2, 97]]]], ["content", "fileName", ["loc", [null, [3, 0], [3, 12]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "columnName", ["loc", [null, [6, 14], [6, 24]]]]], [], []]], ["loc", [null, [6, 0], [6, 26]]]], ["element", "action", ["join"], [], ["loc", [null, [8, 8], [8, 25]]]], ["content", "output", ["loc", [null, [11, 43], [11, 53]]]]],
       locals: [],
       templates: []
     };
@@ -394,7 +429,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("phone-joiner/app")["default"].create({"name":"phone-joiner","version":"0.0.0+8a6e7ac2"});
+  require("phone-joiner/app")["default"].create({"name":"phone-joiner","version":"0.0.0+bc4ab4a5"});
 }
 
 /* jshint ignore:end */

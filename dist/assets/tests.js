@@ -13,7 +13,7 @@ define('phone-joiner/tests/controllers/phone-joiner.jshint', ['exports'], functi
   QUnit.module('JSHint | controllers/phone-joiner.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/phone-joiner.js should pass jshint.\ncontrollers/phone-joiner.js: line 18, col 9, Expected \'{\' and instead saw \'if\'.\ncontrollers/phone-joiner.js: line 23, col 9, Expected \'{\' and instead saw \'for\'.\ncontrollers/phone-joiner.js: line 24, col 11, Expected \'{\' and instead saw \'numberArray\'.\n\n3 errors');
+    assert.ok(true, 'controllers/phone-joiner.js should pass jshint.');
   });
 });
 define('phone-joiner/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {

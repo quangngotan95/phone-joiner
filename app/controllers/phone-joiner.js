@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
   csvData: {},
   output: '',
   fileName: '',
+  columnName: '',
   actions: {
     join() {
       let csvData = this.get('csvData');
@@ -14,14 +15,28 @@ export default Ember.Controller.extend({
       let head = rows[0];
       let numberArray = [];
       let index = -1;
-      for (let i = 0; i < head.length; i++)
-        if (head[i].indexOf('Number') > -1) {
+      let columnName = this.get('columnName');
+      for (let i = 0; i < head.length; i++) {
+        if (head[i].indexOf('number') > -1 || head[i].indexOf('Number') > -1 || head[i].indexOf('Phone') > -1 || head[i].indexOf('phone') > -1) {
           index = i;
           break;
         }
-      if (index > -1)
-        for (let i = 1; i < rows.length; i++)
-          numberArray.push(rows[i][index]);
+      }
+      if (columnName) {
+        index = head.indexOf(columnName);
+      }
+      if (index > -1) {
+        for (let i = 1; i < rows.length; i++) {
+          let temp = rows[i][index];
+          if (!temp) {
+            continue;
+          }
+          if (temp.indexOf('+65') === -1) {
+            temp = '+65' + temp;
+          }
+          numberArray.push(temp);
+        }
+      }
       let output = numberArray.join(',');
       this.set('output', output);
     },
